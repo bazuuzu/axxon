@@ -1,0 +1,58 @@
+---
+# tasks file for axxon-role
+- name: System | Update apt repo and cache
+  apt: 
+    update_cache: yes 
+    force_apt_get: yes
+
+- name: System | Upgrade all packages
+  apt: 
+    upgrade: dist
+    force_apt_get: yes
+
+- name: Axxon | repo source
+  template:
+    src: axxonsoft.list.j2
+    dest: /etc/apt/sources.list.d/axxonsoft.list
+
+- name: Copy content
+  copy:
+    src: info@axxonsoft.com.gpg.key
+    dest: /root/
+    mode: 0774
+
+#- name: Copy content
+#  copy:
+#    src: install-axxon-next.sh
+#    dest: /root/
+#    mode: 0774
+
+- name: Add an Apt signing key, will not download if present
+  apt_key:
+    file: /root/info@axxonsoft.com.gpg.key
+    keyring: /etc/apt/trusted.gpg.d/axxonsoft.gpg
+
+- name: System | Update apt repo and cache
+  apt: 
+    update_cache: yes 
+    force_apt_get: yes
+
+- name: Axxon | Install Axxon Next
+  apt:
+    name: axxon-next={{ axxon_version }}
+    state: present
+
+- name: Axxon | chmod
+  file:
+    path: /archive
+    mode: 0777
+    owner: ngp
+    group: ngp
+    state: directory
+
+#- name: Create a new ext4 primary partition
+#  community.general.parted:
+#    device: /dev/sdb
+#    number: 1
+#    state: present
+#    fs_type: ext4e: present
