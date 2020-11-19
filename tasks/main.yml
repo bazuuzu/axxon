@@ -5,10 +5,10 @@
     update_cache: yes 
     force_apt_get: yes
 
-- name: System | Upgrade all packages
-  apt: 
-    upgrade: dist
-    force_apt_get: yes
+#- name: System | Upgrade all packages
+#  apt: 
+#    upgrade: dist
+#    force_apt_get: yes
 
 - name: Axxon | repo source
   template:
@@ -45,7 +45,7 @@
 - name: Axxon | chmod
   file:
     path: /archive
-    mode: 0777
+    mode: 0755
     owner: ngp
     group: ngp
     state: directory
